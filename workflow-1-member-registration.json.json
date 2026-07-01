@@ -1,0 +1,638 @@
+{
+  "name": "Hot Spurs Gym - Member Registration",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "2cde75df-06f2-4eb1-aa75-a740e18cce2e",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "af19e9b3-8b7c-471b-88cb-f567085218fd",
+      "name": "Webhook",
+      "webhookId": "2cde75df-06f2-4eb1-aa75-a740e18cce2e"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appE5Fh2MnQhsXLyK",
+          "mode": "list",
+          "cachedResultName": "Hot Spurs Gym",
+          "cachedResultUrl": "https://airtable.com/appE5Fh2MnQhsXLyK"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1Xz8N5fpgB4Woo",
+          "mode": "list",
+          "cachedResultName": "Members",
+          "cachedResultUrl": "https://airtable.com/appE5Fh2MnQhsXLyK/tbl1Xz8N5fpgB4Woo"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $('Webhook').item.json.body.submission.questions[0].value }}",
+            "Email": "={{ $('Webhook').item.json.body.submission.questions[1].value }}",
+            "Phone": "={{ $('Webhook').item.json.body.submission.questions[2].value }}",
+            "Membership Type": "={{ $('Webhook').item.json.body.submission.questions[3].value }}",
+            "Start Date": "={{ $now.format('dd-MM-yyyy') }}",
+            "Status": "Active",
+            "Payment Status": "Paid",
+            "Amount": "={{ $json.Amount }}",
+            "Renewal Date": "={{ $('Webhook').item.json.body.submission.questions[3].value === 'Monthly' ? $now.plus(1, 'months').format('dd-MM-yyyy') : $('Webhook').item.json.body.submission.questions[3].value === 'Quarterly' ? $now.plus(3, 'months').format('dd-MM-yyyy') : $now.plus(1, 'years').format('dd-MM-yyyy') }}",
+            "Photo URL": "={{ $('Upload to Cloudinary').isExecuted ? $('Upload to Cloudinary').item.json.secure_url : '' }}",
+            "Member ID": "={{ $json[\"Member ID\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Membership Type",
+              "displayName": "Membership Type",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Monthly",
+                  "value": "Monthly"
+                },
+                {
+                  "name": "Quarterly",
+                  "value": "Quarterly"
+                },
+                {
+                  "name": "Annual",
+                  "value": "Annual"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Start Date",
+              "displayName": "Start Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Renewal Date",
+              "displayName": "Renewal Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Active",
+                  "value": "Active"
+                },
+                {
+                  "name": "Expired",
+                  "value": "Expired"
+                },
+                {
+                  "name": "Pending",
+                  "value": "Pending"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Photo URL",
+              "displayName": "Photo URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Payment Status",
+              "displayName": "Payment Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Paid",
+                  "value": "Paid"
+                },
+                {
+                  "name": "Unpaid",
+                  "value": "Unpaid"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Amount",
+              "displayName": "Amount",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Member ID",
+              "displayName": "Member ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "2fc52c15-2d2d-422e-9fee-184652e21dd9",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "vf5ftW33gpuHmdxp",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.fields['Email'] }}",
+        "subject": "Welcome to Hot Spurs Gym! 💪",
+        "message": "=<div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;\">\n  \n  <div style=\"background-color: #1a1a2e; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;\">\n    <h1 style=\"color: #c9a84c; margin: 0;\">🏋️ HOT SPURS GYM</h1>\n    <p style=\"color: #ffffff; margin: 5px 0;\">Train Hard. Stay Strong.</p>\n  </div>\n\n  <div style=\"background-color: #ffffff; padding: 30px; border-radius: 0 0 10px 10px;\">\n    <h2 style=\"color: #1a1a2e;\">Welcome, {{ $('Edit Fields').item.json['First Name'] }}! 🎉</h2>\n    <p style=\"color: #555;\">Your membership has been successfully registered. Here are your details:</p>\n\n    <table style=\"width: 100%; border-collapse: collapse; margin: 20px 0;\">\n      <tr style=\"background-color: #f4f4f4;\">\n        <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Member ID</strong></td>\n        <td style=\"padding: 12px; border: 1px solid #ddd;\">{{ $json.fields['Member ID'] }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Membership Type</strong></td>\n        <td style=\"padding: 12px; border: 1px solid #ddd;\">{{ $json.fields['Membership Type'] }}</td>\n      </tr>\n      <tr style=\"background-color: #f4f4f4;\">\n        <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Amount</strong></td>\n        <td style=\"padding: 12px; border: 1px solid #ddd;\">₦{{ $json.fields['Amount'] }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Start Date</strong></td>\n        <td style=\"padding: 12px; border: 1px solid #ddd;\">{{ $json.fields['Start Date'] }}</td>\n      </tr>\n      <tr style=\"background-color: #f4f4f4;\">\n        <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Renewal Date</strong></td>\n        <td style=\"padding: 12px; border: 1px solid #ddd;\">{{ $json.fields['Renewal Date'] }}</td>\n      </tr>\n      <tr>\n        <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Status</strong></td>\n        <td style=\"padding: 12px; border: 1px solid #ddd; color: green;\"><strong>✅ {{ $json.fields['Status'] }}</strong></td>\n      </tr>\n    </table>\n\n    <p style=\"color: #555;\">Please bring a valid ID on your first visit.</p>\n\n    <div style=\"background-color: #c9a84c; padding: 15px; border-radius: 8px; text-align: center; margin: 20px 0;\">\n      <p style=\"color: #ffffff; margin: 0; font-size: 16px;\">💪 We're excited to have you on board. Let's get to work! 🔥</p>\n    </div>\n\n    <p style=\"color: #555; font-size: 13px;\">Warm regards,<br><strong>Hot Spurs Gym Team</strong></p>\n\n    <hr style=\"border: none; border-top: 1px solid #eeeeee; margin: 25px 0;\">\n\n    <div style=\"background-color: #1a1a2e; padding: 20px; border-radius: 8px; text-align: center;\">\n      <h3 style=\"color: #c9a84c; margin: 0 0 15px 0;\">📍 Find Us</h3>\n      <p style=\"color: #ffffff; margin: 5px 0;\">12 Athletic Avenue, Lekki Phase 1, Lagos, Nigeria</p>\n      <p style=\"color: #ffffff; margin: 5px 0;\">📞 +234 801 234 5678</p>\n      <p style=\"color: #ffffff; margin: 5px 0;\">📱 WhatsApp: +234 801 234 5678</p>\n      <p style=\"color: #ffffff; margin: 5px 0;\">📧 info@hotspursgym.ng</p>\n      <p style=\"color: #ffffff; margin: 5px 0;\">🌐 www.hotspursgym.ng</p>\n\n      <hr style=\"border: none; border-top: 1px solid #c9a84c; margin: 15px 0;\">\n\n      <h4 style=\"color: #c9a84c; margin: 0 0 10px 0;\">⏰ Opening Hours</h4>\n      <p style=\"color: #ffffff; margin: 5px 0;\">Monday – Friday: 5:00 AM – 10:00 PM</p>\n      <p style=\"color: #ffffff; margin: 5px 0;\">Saturday: 6:00 AM – 8:00 PM</p>\n      <p style=\"color: #ff6b6b; margin: 5px 0;\">Sunday: ❌ Closed</p>\n    </div>\n\n    <p style=\"color: #999; font-size: 11px; text-align: center; margin-top: 20px;\">\n      This email was sent automatically. Please do not reply directly to this email.\n    </p>\n\n  </div>\n\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1600,
+        0
+      ],
+      "id": "958fa557-202e-497a-aa6c-7abd18bae71a",
+      "name": "Send a message",
+      "webhookId": "cc183a63-7a8c-44c7-809d-8ea3ccc5f86b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "DRAWtDTcaORE6b8E",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "20f43096-f528-408c-b96e-c56601d5c132",
+              "leftValue": "={{ $json.body.submission.questions[4].value[0].url }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        176,
+        0
+      ],
+      "id": "3f89ad65-698e-4e76-aeea-d8bac9ee52b7",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.body.submission.questions[4].value[0].url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        -112
+      ],
+      "id": "5e2e8c41-914b-4285-9a90-751b92ff8ec2",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.cloudinary.com/v1_1/dshfvnvq2/image/upload",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "upload_preset",
+              "value": "hotspurs_gym"
+            },
+            {
+              "name": "folder",
+              "value": "hotspurs_members"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        608,
+        -112
+      ],
+      "id": "6a40ab19-4f12-4f24-a1d7-585aa585c586",
+      "name": "Upload to Cloudinary"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e508a902-f2dd-4759-9c2c-61a6597e3a4e",
+              "name": "First Name",
+              "value": "={{ $('Webhook').item.json.body.submission.questions[0].value.split(' ')[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "cdaeb3c8-4d69-4e00-90eb-8a434826168a",
+              "name": "Member ID",
+              "value": "={{ 'HS-' + $now.toFormat('yyyyMMdd') + '-' + Math.floor(Math.random() * 9000 + 1000) }}",
+              "type": "string"
+            },
+            {
+              "id": "9f11dd4c-8eec-46b3-9dfa-6f0f36ae5539",
+              "name": "Amount",
+              "value": "={{ $('Webhook').item.json.body.submission.questions[3].value === 'Monthly' ? '₦15,000' : $('Webhook').item.json.body.submission.questions[3].value === 'Quarterly' ? '₦40,500' : '₦135,000' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1056,
+        0
+      ],
+      "id": "c1c19500-01cd-451b-b108-9bd42f25bea8",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        864,
+        0
+      ],
+      "id": "9bb5d171-d6ea-4efd-9666-af01a7910af8",
+      "name": "Merge"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1424,
+        0
+      ],
+      "id": "341b7ce8-f500-43a7-a80c-4f127430d143",
+      "name": "Wait",
+      "webhookId": "b8dd3a48-4b9a-46c3-8b67-785872566cab"
+    },
+    {
+      "parameters": {
+        "chatId": "649030827",
+        "text": "=🔔 *New Member Alert!*\n\n👤 *Name:* {{ $('Create a record').item.json.fields['Full Name'] }} \n📋 *Member ID:* {{ $('Create a record').item.json.fields['Member ID'] }}\n💪 *Plan:* {{ $('Create a record').item.json.fields['Membership Type'] }}\n💰 *Amount:* ₦{{ $('Create a record').item.json.fields.Amount }}\n📅 *Start:* {{ $('Create a record').item.json.fields['Start Date'] }}\n📅 *Renewal:* {{ $('Create a record').item.json.fields['Renewal Date'] }}\n📞 *Phone:* {{ $('Create a record').item.json.fields.Phone }}\n📧 *Email:* {{ $('Create a record').item.json.fields.Email }}\n\n🏋️ *Hot Spurs Gym*",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1808,
+        0
+      ],
+      "id": "63e5e3d5-d41d-4465-9dfe-b74ba08ae506",
+      "name": "Send a text message",
+      "webhookId": "727458a1-9ad3-4f7d-8b84-92c7774d0882",
+      "credentials": {
+        "telegramApi": {
+          "id": "MIKCeP0Oc8WVJVTf",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "primary-production-a8eb1.up.railway.app",
+            "user-agent": "node-fetch/1.0 (+https://github.com/bitinn/node-fetch)",
+            "content-length": "724",
+            "accept": "application/json",
+            "accept-encoding": "gzip,deflate",
+            "baggage": "sentry-environment=production,sentry-public_key=fb9e5b294f68425eb7eb6b168b67dc8d,sentry-trace_id=a1be0a66a6cf4e8ca526d1a617ecebe0",
+            "content-type": "application/json",
+            "sentry-trace": "a1be0a66a6cf4e8ca526d1a617ecebe0-b74e1db7bc0db3c8",
+            "traceparent": "00-6a439bb4000000005406267dcf257af5-59d8dce4dc8aa447-00",
+            "tracestate": "dd=t.tid:6a439bb400000000;t.dm:-3;s:-1;p:59d8dce4dc8aa447",
+            "x-datadog-parent-id": "6474167339855815751",
+            "x-datadog-sampling-priority": "-1",
+            "x-datadog-tags": "_dd.p.tid=6a439bb400000000",
+            "x-datadog-trace-id": "6054569070834318069",
+            "x-forwarded-for": "74.220.48.253, 84.17.44.227",
+            "x-forwarded-host": "primary-production-a8eb1.up.railway.app",
+            "x-forwarded-proto": "https",
+            "x-railway-edge": "lax1",
+            "x-railway-request-id": "iDNyrTaXRnevCs-QnPRhug",
+            "x-real-ip": "74.220.48.253",
+            "x-request-start": "1782815668808"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "formId": "2vpMqYPBK8us",
+            "formName": "Hot Spurs Gym Registration",
+            "submission": {
+              "submissionId": "82b594ce-6cea-4318-8ce8-b6a21ef32610",
+              "submissionTime": "2026-06-30T10:34:28.732Z",
+              "lastUpdatedAt": "2026-06-30T10:34:28.732Z",
+              "questions": [
+                {
+                  "id": "91bL",
+                  "name": "Full Name",
+                  "type": "ShortAnswer",
+                  "value": "Tracy Sanders"
+                },
+                {
+                  "id": "tT3o",
+                  "name": "Email Address",
+                  "type": "EmailInput",
+                  "value": "reigndavies208@gmail.com"
+                },
+                {
+                  "id": "fc6p",
+                  "name": "Phone number",
+                  "type": "PhoneNumber",
+                  "value": "+2348096756453"
+                },
+                {
+                  "id": "9Lxb",
+                  "name": "Membership Type",
+                  "type": "Dropdown",
+                  "value": "Annually"
+                },
+                {
+                  "id": "pHMN",
+                  "name": "Photo Upload",
+                  "type": "FileUpload",
+                  "value": null
+                }
+              ],
+              "calculations": [],
+              "urlParameters": [],
+              "quiz": {},
+              "documents": [],
+              "scheduling": [],
+              "payments": []
+            }
+          },
+          "webhookUrl": "https://primary-production-a8eb1.up.railway.app/webhook/2cde75df-06f2-4eb1-aa75-a740e18cce2e",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Upload to Cloudinary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Cloudinary": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0de64750-86ad-4a8e-beb0-b52dff779d01",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7f0f8b04b583b3bc48bfafe715431755b4f8c3d117fcb725b133773386f9141f"
+  },
+  "nodeGroups": [],
+  "id": "rZv6dujDyg1Dv9xJ",
+  "tags": []
+}

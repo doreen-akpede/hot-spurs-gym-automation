@@ -1,0 +1,874 @@
+{
+  "name": "Hot Spurs Gym - Expiry & Renewal",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "97dc7540-b096-43d1-b52f-f3577756ca71",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appE5Fh2MnQhsXLyK",
+          "mode": "list",
+          "cachedResultName": "Hot Spurs Gym",
+          "cachedResultUrl": "https://airtable.com/appE5Fh2MnQhsXLyK"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1Xz8N5fpgB4Woo",
+          "mode": "list",
+          "cachedResultName": "Members",
+          "cachedResultUrl": "https://airtable.com/appE5Fh2MnQhsXLyK/tbl1Xz8N5fpgB4Woo"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3a5e2ee9-b373-4396-af33-5b799c46b073",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "vf5ftW33gpuHmdxp",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "96c3676f-189c-419c-920e-cd515e43386e",
+              "leftValue": "={{ $json.fields['Renewal Date'] }}",
+              "rightValue": "={{ $now.toFormat('yyyy-MM-dd') }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "d21ccf68-36bc-47b9-935f-8363c4421223",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appE5Fh2MnQhsXLyK",
+          "mode": "list",
+          "cachedResultName": "Hot Spurs Gym",
+          "cachedResultUrl": "https://airtable.com/appE5Fh2MnQhsXLyK"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1Xz8N5fpgB4Woo",
+          "mode": "list",
+          "cachedResultName": "Members",
+          "cachedResultUrl": "https://airtable.com/appE5Fh2MnQhsXLyK/tbl1Xz8N5fpgB4Woo"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Status": "Expired",
+            "Payment Status": "Unpaid"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Membership Type",
+              "displayName": "Membership Type",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Monthly",
+                  "value": "Monthly"
+                },
+                {
+                  "name": "Quarterly",
+                  "value": "Quarterly"
+                },
+                {
+                  "name": "Annual",
+                  "value": "Annual"
+                },
+                {
+                  "name": "Annually",
+                  "value": "Annually"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Start Date",
+              "displayName": "Start Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Renewal Date",
+              "displayName": "Renewal Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Active",
+                  "value": "Active"
+                },
+                {
+                  "name": "Expired",
+                  "value": "Expired"
+                },
+                {
+                  "name": "Pending",
+                  "value": "Pending"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Photo URL",
+              "displayName": "Photo URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Payment Status",
+              "displayName": "Payment Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Paid",
+                  "value": "Paid"
+                },
+                {
+                  "name": "Unpaid",
+                  "value": "Unpaid"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Amount",
+              "displayName": "Amount",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Member ID",
+              "displayName": "Member ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        -96
+      ],
+      "id": "a0768757-55c5-4342-8f91-d15fa6df1ead",
+      "name": "Update record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "vf5ftW33gpuHmdxp",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Search records').item.json.fields.Email }}",
+        "subject": "🔴 Your Hot Spurs Gym Membership Has Expired",
+        "message": "=<div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;\">      <div style=\"background-color: #1a1a2e; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;\">     <h1 style=\"color: #c9a84c; margin: 0;\">🏋️ HOT SPURS GYM</h1>     <p style=\"color: #ffffff; margin: 5px 0;\">Train Hard. Stay Strong.</p>   </div>    <div style=\"background-color: #ffffff; padding: 30px; border-radius: 0 0 10px 10px;\">     <h2 style=\"color: #c0392b;\">Hi {{ $('Search records').item.json.fields['Full Name'] }}, 🔴</h2>     <p style=\"color: #555;\">Your Hot Spurs Gym membership officially expired today. To keep your access active and continue training with us, please renew as soon as possible.</p>      <table style=\"width: 100%; border-collapse: collapse; margin: 20px 0;\">       <tr style=\"background-color: #f4f4f4;\">         <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Member ID</strong></td>         <td style=\"padding: 12px; border: 1px solid #ddd;\">{{ $('Search records').item.json.fields['Member ID'] }}</td>       </tr>       <tr>         <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Membership Type</strong></td>         <td style=\"padding: 12px; border: 1px solid #ddd;\">{{ $('Search records').item.json.fields['Membership Type'] }}</td>       </tr>       <tr style=\"background-color: #f4f4f4;\">         <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Amount Due</strong></td>         <td style=\"padding: 12px; border: 1px solid #ddd;\">₦{{ $('Search records').item.json.fields['Amount'] }}</td>       </tr>       <tr>         <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Status</strong></td>         <td style=\"padding: 12px; border: 1px solid #ddd; color: #c0392b;\"><strong>Expired</strong></td>       </tr>     </table>      <div style=\"background-color: #f4f4f4; padding: 20px; border-radius: 8px; margin: 20px 0;\">       <h3 style=\"color: #1a1a2e; margin: 0 0 12px 0;\">💳 Renew via Bank Transfer</h3>       <p style=\"color: #555; margin: 4px 0;\"><strong>Bank Name:</strong> First National Bank</p>       <p style=\"color: #555; margin: 4px 0;\"><strong>Account Name:</strong> Hot Spurs Gym Ltd</p>       <p style=\"color: #555; margin: 4px 0;\"><strong>Account Number:</strong> 0123456789</p>       <p style=\"color: #555; margin: 4px 0;\">Once paid, click the button below to confirm your renewal so we can reactivate your membership right away.</p>     </div>      <div style=\"text-align: center; margin: 30px 0;\">       <a href=\"https://forms.fillout.com/t/csbhvu9XHSus\" style=\"background-color: #c9a84c; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block;\">         ✅ Renew Now       </a>     </div>      <p style=\"color: #555;\">Questions? Reply to this email or reach us on WhatsApp.</p>      <p style=\"color: #555; font-size: 13px;\">Warm regards,<br><strong>Hot Spurs Gym Team</strong></p>      <hr style=\"border: none; border-top: 1px solid #eeeeee; margin: 25px 0;\">      <div style=\"background-color: #1a1a2e; padding: 20px; border-radius: 8px; text-align: center;\">       <h3 style=\"color: #c9a84c; margin: 0 0 15px 0;\">📍 Find Us</h3>       <p style=\"color: #ffffff; margin: 5px 0;\">12 Athletic Avenue, Lekki Phase 1, Lagos, Nigeria</p>       <p style=\"color: #ffffff; margin: 5px 0;\">📞 +234 801 234 5678</p>       <p style=\"color: #ffffff; margin: 5px 0;\">📱 WhatsApp: +234 801 234 5678</p>       <p style=\"color: #ffffff; margin: 5px 0;\">📧 info@hotspursgym.ng</p>        <hr style=\"border: none; border-top: 1px solid #c9a84c; margin: 15px 0;\">        <h4 style=\"color: #c9a84c; margin: 0 0 10px 0;\">⏰ Opening Hours</h4>       <p style=\"color: #ffffff; margin: 5px 0;\">Monday – Friday: 5:00 AM – 10:00 PM</p>       <p style=\"color: #ffffff; margin: 5px 0;\">Saturday: 6:00 AM – 8:00 PM</p>       <p style=\"color: #ff6b6b; margin: 5px 0;\">Sunday: ❌ Closed</p>     </div>      <p style=\"color: #999; font-size: 11px; text-align: center; margin-top: 20px;\">       This email was sent automatically. Please do not reply directly to this email.     </p>    </div>  </div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        -96
+      ],
+      "id": "6b3c1d3a-fbe2-4169-9930-d5e3c25e35a2",
+      "name": "Send a message",
+      "webhookId": "afc9a890-1a84-4fa3-a399-98722e5b9cac",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "DRAWtDTcaORE6b8E",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "70560d85-30da-464c-bfd9-af9c9a10528f",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        208
+      ],
+      "id": "f71b129c-c8d3-43bb-91ab-1aaf2aa3297e",
+      "name": "Webhook",
+      "webhookId": "70560d85-30da-464c-bfd9-af9c9a10528f"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appE5Fh2MnQhsXLyK",
+          "mode": "list",
+          "cachedResultName": "Hot Spurs Gym",
+          "cachedResultUrl": "https://airtable.com/appE5Fh2MnQhsXLyK"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1Xz8N5fpgB4Woo",
+          "mode": "list",
+          "cachedResultName": "Members",
+          "cachedResultUrl": "https://airtable.com/appE5Fh2MnQhsXLyK/tbl1Xz8N5fpgB4Woo"
+        },
+        "filterByFormula": "=AND({Email} = \"{{ $json.body.submission.questions[0].value }}\", {Status} = \"Expired\")",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        464,
+        208
+      ],
+      "id": "c349b856-a549-41b7-9e10-43cacd287c3a",
+      "name": "Search records1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "vf5ftW33gpuHmdxp",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appE5Fh2MnQhsXLyK",
+          "mode": "list",
+          "cachedResultName": "Hot Spurs Gym",
+          "cachedResultUrl": "https://airtable.com/appE5Fh2MnQhsXLyK"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1Xz8N5fpgB4Woo",
+          "mode": "list",
+          "cachedResultName": "Members",
+          "cachedResultUrl": "https://airtable.com/appE5Fh2MnQhsXLyK/tbl1Xz8N5fpgB4Woo"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Membership Type": "={{ $('Webhook').item.json.body.submission.questions[1].value }}",
+            "Start Date": "={{ $now.toFormat('yyyy-MM-dd') }}",
+            "Renewal Date": "={{ $('Webhook').item.json.body.submission.questions[1].value === 'Monthly' ? $now.plus({months: 1}).toFormat('yyyy-MM-dd') : $('Webhook').item.json.body.submission.questions[1].value === 'Quarterly' ? $now.plus({months: 3}).toFormat('yyyy-MM-dd') : $now.plus({years: 1}).toFormat('yyyy-MM-dd') }}",
+            "Status": "Active",
+            "Payment Status": "Paid",
+            "Amount": "= {{ $('Webhook').item.json.body.submission.questions[1].value === 'Monthly' ? 15000 : $('Webhook').item.json.body.submission.questions[1].value === 'Quarterly' ? 40500 : 135000 }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Membership Type",
+              "displayName": "Membership Type",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Monthly",
+                  "value": "Monthly"
+                },
+                {
+                  "name": "Quarterly",
+                  "value": "Quarterly"
+                },
+                {
+                  "name": "Annual",
+                  "value": "Annual"
+                },
+                {
+                  "name": "Annually",
+                  "value": "Annually"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Start Date",
+              "displayName": "Start Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Renewal Date",
+              "displayName": "Renewal Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Active",
+                  "value": "Active"
+                },
+                {
+                  "name": "Expired",
+                  "value": "Expired"
+                },
+                {
+                  "name": "Pending",
+                  "value": "Pending"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Photo URL",
+              "displayName": "Photo URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Payment Status",
+              "displayName": "Payment Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Paid",
+                  "value": "Paid"
+                },
+                {
+                  "name": "Unpaid",
+                  "value": "Unpaid"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Amount",
+              "displayName": "Amount",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Member ID",
+              "displayName": "Member ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        208
+      ],
+      "id": "e4650c35-f0a5-44f9-bdd6-70129ecc15a0",
+      "name": "Update record1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "vf5ftW33gpuHmdxp",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "649030827",
+        "text": "=🔴 *Membership Expired!*\n\n👤 *Member:* {{ $('Search records').item.json.fields['Full Name'] }}\n📋 *Member ID:* {{ $('Search records').item.json.fields['Member ID'] }}\n💪 *Plan:* {{ $('Search records').item.json.fields['Membership Type'] }}\n💰 *Amount Due:* ₦{{ $('Search records').item.json.fields['Amount'] }}\n📅 *Expired:* {{ $('Search records').item.json.fields['Renewal Date'] }}\n📞 *Phone:* {{ $('Search records').item.json.fields['Phone'] }}\n📧 *Email:* {{ $('Search records').item.json.fields['Email'] }}\n\n⚠️ Member has been notified via email to renew.\n\n🏋️ *Hot Spurs Gym*",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        -96
+      ],
+      "id": "f1bd30d6-7f83-4f44-965f-5e7aa1e9614b",
+      "name": "Send a text message",
+      "webhookId": "79ee1f99-1a74-4581-ba9b-b985a9884b04",
+      "credentials": {
+        "telegramApi": {
+          "id": "MIKCeP0Oc8WVJVTf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Search records1').item.json.fields.Email }}",
+        "subject": "✅ Your Hot Spurs Gym Membership Has Been Renewed!",
+        "message": "=<div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;\">      <div style=\"background-color: #1a1a2e; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;\">     <h1 style=\"color: #c9a84c; margin: 0;\">🏋️ HOT SPURS GYM</h1>     <p style=\"color: #ffffff; margin: 5px 0;\">Train Hard. Stay Strong.</p>   </div>    <div style=\"background-color: #ffffff; padding: 30px; border-radius: 0 0 10px 10px;\">     <h2 style=\"color: #1a1a2e;\">Welcome Back, {{ $('Search records1').item.json.fields['Full Name'] }}! 🎉</h2>     <p style=\"color: #555;\">Your Hot Spurs Gym membership has been successfully renewed. You're all set to get back on the floor and keep crushing your goals!</p>      <table style=\"width: 100%; border-collapse: collapse; margin: 20px 0;\">       <tr style=\"background-color: #f4f4f4;\">         <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Member ID</strong></td>         <td style=\"padding: 12px; border: 1px solid #ddd;\">{{ $('Search records1').item.json.fields['Member ID'] }}</td>       </tr>       <tr>         <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Membership Type</strong></td>         <td style=\"padding: 12px; border: 1px solid #ddd;\">{{ $json.fields['Membership Type'] }}</td>       </tr>       <tr style=\"background-color: #f4f4f4;\">         <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Amount Paid</strong></td>         <td style=\"padding: 12px; border: 1px solid #ddd;\">₦{{ $('Search records1').item.json.fields['Amount'] }}</td>       </tr>       <tr>         <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>New Start Date</strong></td>         <td style=\"padding: 12px; border: 1px solid #ddd;\">{{ $json.fields['Start Date'] }}</td>       </tr>       <tr style=\"background-color: #f4f4f4;\">         <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>New Renewal Date</strong></td>         <td style=\"padding: 12px; border: 1px solid #ddd;\">{{ $json.fields['Renewal Date'] }}</td>       </tr>       <tr>         <td style=\"padding: 12px; border: 1px solid #ddd;\"><strong>Status</strong></td>         <td style=\"padding: 12px; border: 1px solid #ddd; color: green;\"><strong>✅ Active</strong></td>       </tr>     </table>      <div style=\"background-color: #c9a84c; padding: 15px; border-radius: 8px; text-align: center; margin: 20px 0;\">       <p style=\"color: #ffffff; margin: 0; font-size: 16px;\">💪 Your access has been restored. See you on the floor! 🔥</p>     </div>      <p style=\"color: #555;\">If you have any questions about your membership, feel free to reach out to us via email or WhatsApp.</p>      <p style=\"color: #555; font-size: 13px;\">Warm regards,<br><strong>Hot Spurs Gym Team</strong></p>      <hr style=\"border: none; border-top: 1px solid #eeeeee; margin: 25px 0;\">      <div style=\"background-color: #1a1a2e; padding: 20px; border-radius: 8px; text-align: center;\">       <h3 style=\"color: #c9a84c; margin: 0 0 15px 0;\">📍 Find Us</h3>       <p style=\"color: #ffffff; margin: 5px 0;\">12 Athletic Avenue, Lekki Phase 1, Lagos, Nigeria</p>       <p style=\"color: #ffffff; margin: 5px 0;\">📞 +234 801 234 5678</p>       <p style=\"color: #ffffff; margin: 5px 0;\">📱 WhatsApp: +234 801 234 5678</p>       <p style=\"color: #ffffff; margin: 5px 0;\">📧 info@hotspursgym.ng</p>       <p style=\"color: #ffffff; margin: 5px 0;\">🌐 www.hotspursgym.ng</p>        <hr style=\"border: none; border-top: 1px solid #c9a84c; margin: 15px 0;\">        <h4 style=\"color: #c9a84c; margin: 0 0 10px 0;\">⏰ Opening Hours</h4>       <p style=\"color: #ffffff; margin: 5px 0;\">Monday – Friday: 5:00 AM – 10:00 PM</p>       <p style=\"color: #ffffff; margin: 5px 0;\">Saturday: 6:00 AM – 8:00 PM</p>       <p style=\"color: #ff6b6b; margin: 5px 0;\">Sunday: ❌ Closed</p>     </div>      <p style=\"color: #999; font-size: 11px; text-align: center; margin-top: 20px;\">       This email was sent automatically. Please do not reply directly to this email.     </p>    </div>  </div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        208
+      ],
+      "id": "90ffae2e-3266-4583-b471-3a97ed9f1066",
+      "name": "Send a message1",
+      "webhookId": "aeb8c8f7-7d65-49d1-9b84-69ee82b71014",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "DRAWtDTcaORE6b8E",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "649030827",
+        "text": "=✅ *Membership Renewed!*\n\n👤 *Member:* {{ $('Search records1').item.json.fields['Full Name'] }}\n📋 *Member ID:* {{ $('Search records1').item.json.fields['Member ID'] }}\n💪 *Plan:* {{ $('Update record1').item.json.fields['Membership Type'] }}\n💰 *Amount Paid:* ₦{{ $('Search records1').item.json.fields['Amount'] }}\n📅 *New Start Date:* {{ $('Update record1').item.json.fields['Start Date'] }}\n📅 *New Renewal Date:* {{ $('Update record1').item.json.fields['Renewal Date'] }}\n📞 *Phone:* {{ $('Search records1').item.json.fields['Phone'] }}\n📧 *Email:* {{ $('Search records1').item.json.fields['Email'] }}\n\n🎉 Member is back Active — record updated in Airtable.\n\n🏋️ *Hot Spurs Gym*",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        208
+      ],
+      "id": "67c8b57f-9122-482e-a20d-36834ce808a8",
+      "name": "Send a text message1",
+      "webhookId": "4c674455-7678-47b4-93ed-7e2d7cc88761",
+      "credentials": {
+        "telegramApi": {
+          "id": "MIKCeP0Oc8WVJVTf",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "primary-production-a8eb1.up.railway.app",
+            "user-agent": "node-fetch/1.0 (+https://github.com/bitinn/node-fetch)",
+            "content-length": "592",
+            "accept": "application/json",
+            "accept-encoding": "gzip,deflate",
+            "baggage": "sentry-environment=production,sentry-public_key=fb9e5b294f68425eb7eb6b168b67dc8d,sentry-trace_id=33da6fc9749745d9a364a287d75a3898",
+            "content-type": "application/json",
+            "sentry-trace": "33da6fc9749745d9a364a287d75a3898-ab3409a442bba326",
+            "traceparent": "00-6a45229f00000000595024b4c3c1480e-1f7297e991a1e33c-00",
+            "tracestate": "dd=t.tid:6a45229f00000000;t.dm:-3;s:-1;p:1f7297e991a1e33c",
+            "x-datadog-parent-id": "2266040591947260732",
+            "x-datadog-sampling-priority": "-1",
+            "x-datadog-tags": "_dd.p.tid=6a45229f00000000",
+            "x-datadog-trace-id": "6435684226309376014",
+            "x-forwarded-for": "74.220.48.253, 84.17.44.229",
+            "x-forwarded-host": "primary-production-a8eb1.up.railway.app",
+            "x-forwarded-proto": "https",
+            "x-railway-edge": "lax1",
+            "x-railway-request-id": "oQPJfOM5R4-Ig-GRLPU1MQ",
+            "x-real-ip": "74.220.48.253",
+            "x-request-start": "1782915744016"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "formId": "csbhvu9XHSus",
+            "formName": "Hot Spurs Gym - Renew Membership",
+            "submission": {
+              "submissionId": "6203187a-1bd2-42b8-b369-9ddd5715bc04",
+              "submissionTime": "2026-07-01T14:22:23.928Z",
+              "lastUpdatedAt": "2026-07-01T14:22:23.928Z",
+              "questions": [
+                {
+                  "id": "rWGD",
+                  "name": "Email Address",
+                  "type": "EmailInput",
+                  "value": "reigndavies208@gmail.com"
+                },
+                {
+                  "id": "97mF",
+                  "name": "Membership Type",
+                  "type": "Dropdown",
+                  "value": "Monthly"
+                },
+                {
+                  "id": "gMg7",
+                  "name": "I have made payment via bank transfer",
+                  "type": "Checkbox",
+                  "value": true
+                }
+              ],
+              "calculations": [],
+              "urlParameters": [],
+              "quiz": {},
+              "documents": [],
+              "scheduling": [],
+              "payments": []
+            }
+          },
+          "webhookUrl": "https://primary-production-a8eb1.up.railway.app/webhook/70560d85-30da-464c-bfd9-af9c9a10528f",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Search records1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records1": {
+      "main": [
+        [
+          {
+            "node": "Update record1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "3bb4d7f4-49b5-4673-90b3-e05859612a24",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7f0f8b04b583b3bc48bfafe715431755b4f8c3d117fcb725b133773386f9141f"
+  },
+  "nodeGroups": [],
+  "id": "9Pp1lZ6o7IOJSPWB",
+  "tags": []
+}
