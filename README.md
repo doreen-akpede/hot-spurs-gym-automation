@@ -162,7 +162,7 @@ See the full debugging case study → *(link to LinkedIn post)*
 Built as part of a structured professional AI Automation training programme,
 focusing on no-code workflow automation, AI integration, and real-world
 client project delivery. 
-[LinkedIn](https://linkedin.com/in/your-profile) | [GitHub](https://github.com/doreendasweet-dot)
+[LinkedIn](https://www.linkedin.com/in/onohinosen-akpede) | [GitHub](https://github.com/doreendasweet-dot)
 
 ---
 
