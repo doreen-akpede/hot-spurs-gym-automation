@@ -46,3 +46,29 @@ A related fourth issue: once data was flowing, the Airtable Photo URL field refe
 
 
 Lesson: A green "Succeeded" status confirms only that no error was thrown — not that the data was correct. The only reliable way to validate a multi-branch workflow is to inspect actual node outputs at each step, on every distinct path, not just the one tested first. Conditional branches that converge (via Merge, Switch, or similar) deserve particular scrutiny, since their failure modes are often silent rather than loud.
+
+
+### A Fifth Fix — Handling Missed Scheduler Runs (Production Edge Case)
+
+While testing Chain 1's expiry detection, a subtler reliability issue surfaced — one that wouldn't show up in a single test run, but would cause real problems over time in production.
+
+**The original logic:**
+```
+{{ $json.fields['Renewal Date'] }}  is equal to  {{ $now.toFormat('yyyy-MM-dd') }}
+```
+
+This only matched members whose Renewal Date was **exactly today**. Two problems with that:
+
+1. **Missed runs are unrecoverable.** If the Schedule Trigger ever failed to run on the exact expiry day (server downtime, a Railway restart, etc.), that member's one-day match window would pass silently. Their Airtable record would stay "Active" indefinitely, even though they'd never renewed — the workflow would have no way to catch them on a later run.
+
+2. **No protection against duplicate notifications.** Once a Renewal Date is in the past, it stays in the past. On a strict `<=` match with no other filter, the *same* expired member would be re-matched on every single subsequent daily run — meaning they'd get repeat expiry emails, and the gym owner would get repeat Telegram alerts about a member who was already flagged the day before.
+
+**The fix — two conditions, combined with AND:**
+```
+{{ $json.fields['Renewal Date'] }}  is before or equal to  {{ $now.toFormat('yyyy-MM-dd') }}
+{{ $json.fields['Status'] }}        is equal to      Active
+```
+
+Switching the date comparison from "is equal to" to "is before or equal to" means any member whose renewal date has passed — whether caught exactly on time or a few days late — still gets flagged, closing the missed-run gap. Adding the Status = Active condition means that once a member has already been flipped to "Expired" by this workflow, they're excluded from matching again on future runs, preventing repeat notifications.
+
+**Lesson:** A condition that works correctly in a single manual test can still be fragile in production. Testing against "does this match today's exact scenario" isn't the same as testing against "what happens if this runs unreliably, or runs on the same stale data twice." Building in idempotency (safe to re-run without duplicating side effects) and tolerance for missed executions are both easy to overlook when a workflow is only ever tested happy-path.
